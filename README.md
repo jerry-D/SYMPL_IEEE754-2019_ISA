@@ -4,4 +4,6 @@
 
 For a preview of what's to come, click on the thumb of a 17" x 24" poster-size preliminary information sheet below.  This repository will be continually updated with FPGA flash file that you can use to flash your ULX3S FPGA with for evaluation purposes.  To obtain your RADIONA ULX3S board, visit CrowdSupply or MOUSER Electronics.  Be sure to order the model with the -85F FPGA.
 
+[![poster](https://github.com/jerry-D/SYMPL_IEEE754-2019_ISA/blob/main/SYMPL_IEEE_754_poster_v1_3_thumb.png)](https://github.com/jerry-D/SYMPL_IEEE754-2019_ISA/blob/main/SYMPL_IEEE_754_poster_v1_3.png)
+
 
