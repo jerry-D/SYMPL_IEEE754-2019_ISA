@@ -1,5 +1,9 @@
 # 32, 64, 128 and 256-bit SYMPL IEEE 754-2019 Instruction Set Architecture Compute Engine.
 
+(July 6, 2021) Update:  Below is a .gif showing the target 128-bit process executing a very simple routine to display vintage Textronix 401X plots on the Tera Term TEK display.
+
+[![TEKgif](https://github.com/jerry-D/SYMPL_IEEE754-2019_ISA/blob/main/SYMPdemo2.gif)](https://github.com/jerry-D/SYMPL_IEEE754-2019_ISA/blob/main/SYMPdemo2.gif)
+
 (June 28, 2021) Update:  the debugger now has source-level disassembly.  The animated .gif below shows an actual debug session starting from power-up message, then proceeding to Help menu, uploading a binary executable, uploading object listing file, setting harware breakpoint, running, hitting breakpoint, single-stepping, displaying data dump, editing a data memory location, single-stepping, then free-run with auto snap-shot occuring every 2 seconds.  While running in real-time, you can examine and edit any memory location on-the-fly, without having to force a breakpoint first, all without the need for any s/w routines on the target side, as it's all done in hardware.
 
 [![RTMDXgif](https://github.com/jerry-D/SYMPL_IEEE754-2019_ISA/blob/main/SYMPL_RTMDX.gif)](https://github.com/jerry-D/SYMPL_IEEE754-2019_ISA/blob/main/SYMPL_RTMDX.gif)
