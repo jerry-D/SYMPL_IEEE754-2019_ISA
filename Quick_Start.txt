@@ -1,0 +1,77 @@
+
+July 7, 2021
+SYMPL ISA 128-bit Compute Engine 
+Alpha Evaluation Release  Version 1.04a
+Quick-Start Instructions
+
+The demo employs all 3 Tera Term display buffers:  Normal, Alternate, and Tektronix 4010.  
+This implementation comprises two SYMPL Compute Engines.  The first processor is for the 
+target application.  The second is the real-time debugger function.  The Normal display 
+buffer is for use by the target application.  The target can also perform graphic renderings 
+using the Textronix display buffer and this implementation demonstrates this.  
+
+The Alternate display buffer is used exclusively by the debugger.
+
+When the system is first powered up, it comes up in debug mode using the Alternate display buffer.  
+When the target application is launched with the G<cr> command, the display is automatically 
+switched to the Normal display buffer.  If a hardware or software breakpoint has been set and the 
+target hits one of these, the display buffer automatically switches back to debugger Alternate
+display buffer.
+
+The asynchronous serial port of the target is arranged in series with the debugger serial port, 
+with the debugger mediating communications between the PC and the target when the target 
+is in RUN mode.  
+
+To get your SYMPL ISA 128 Evaluation up and running in the ULX3S, follow these easy steps:
+
+1) flash your ULX3S using the provided SYMPL_demo.bit file.  The Lattice device must be a 
+ECP5 85F size.  If you don't have a ULX3S board, you can order one online from Mouser Electronics 
+at the following link:
+
+https://www.mouser.com/ProductDetail/Crowd-Supply/CS-ULX3S-03?qs=hWgE7mdIu5SAh1Tg%2FLbSUg%3D%3D
+
+2a) If you don't already have a copy of Tera Term VT100 terminal emulator installed,
+visit the following website, download it, and install it:
+
+https://osdn.net/projects/ttssh2/releases/
+
+2b) For Linux users, D EMARD has demonstrated the debugger and target application working with
+xterm, with binary uploads being accomplished using the newest version of Fujprog.  For specifics,
+contact D EMARD.  I've seen screen snapshots of it and it looks pretty good.
+
+3) once you've installed Tera Term, place the provided TERATERM.INI file in your 
+c:\users\My Documents directory, in that this is where Tera Term expects to find it when launched.
+This .INI file already has correct baud rate, window size, etc. specified.
+
+4) Launch Tera Term
+5) press the reset button (button 0) on the ULX3S board
+6) Once you see the power-up message, press <cr> to get the Help Menu
+7) When you are ready, press <cr> again to go to the debugger window
+8) to run the demo, type G<cr>
+9) to exit the demo, press buttons 1 & 2 on the ULX3S board simultaneously
+10) when you return to the debug window, you will notice there is no source-level disassembly of 
+    the instructions in the listing.  If you want disassembly, type UL<cr>, and send the provided 
+    SYMPL_demo.LST file.  Make sure “binary” is checked in the dialog box before clicking the SEND button.
+11) To return to the demo press G<cr>
+12) Also provided is a copy of the assembly language source file, which you can edit and re-assemble 
+    using the provided instruction table and download if you want.
+13) study the help menu to discover features and capabilities of the debugger
+14) I will be writing a more detailed user manual in the next few weeks.  In the meantime, 
+    if you have questions, email me
+15) A copy of the assembler can be purchased online for $99.00US at:
+    https://www.cdadapter.com/cross32.htm
+16) This particular implementation is 128-bit integer only.  It has the following memory-mapped 
+    integer arithmetic operators.  I will be adding more integer and floating-point operators 
+    in the coming weeks:
+      AND
+      OR
+      XOR
+      SHIFT
+      ADD
+      ADDC
+      SUB
+      SUBB
+17) For specifics on their use, download and study the provided instruction table and UFP_ISA 
+    document at this address:
+    
+https://github.com/jerry-D/HedgeHog-Fused-Spiking-Neural-Network-Emulator-Compute-Engine/blob/master/UFP_ISA.pdf
