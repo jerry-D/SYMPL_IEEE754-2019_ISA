@@ -1,5 +1,7 @@
 # 32, 64, 128 and 256-bit SYMPL IEEE 754-2019 Instruction Set Architecture Compute Engine.
 
+(July 7, 2021) Alpha release of the SYMPL Universal ISA Compute Engine and debugger have been published in this repository in the form of a .bit file for flashing the Lattice Semiconductor ECP5-85F FPGA.  If you have a RADIONA ULX3S -85F FPGA board, you can flash it with the .bit file provided in this repository.  For quick-start reference, refer to the Quick-Start.txt document in this repository. Over the next few weeks, more documentation will be published here.  Also starting in a couple weeks is introduction of the ISA with IEEE-754-2019 floating-point.
+
 (July 6, 2021) Update:  Below is a .gif showing the target 128-bit process executing a very simple routine to display vintage Textronix 401X plots on the Tera Term TEK display.  It shows the ULX3S coming up, the go command being entered from the debugger, and the target demo program being run.  The debugger has exlusive use of the Alternate display buffer while the target processor uses the Normal display buffer and can write to the TEK graphic plot display, as shown in the .gif animation.  It employs the auto-detection feature of Tera Term, so that the renderings go to the TEK display automatically.  When done, the user depresses buttons 1 & 2 on the ULX3S and the terminal automatically switches back to Alternate display buffer of the debugger. 
 
 [![TEKgif](https://github.com/jerry-D/SYMPL_IEEE754-2019_ISA/blob/main/SYMPdemo2.gif)](https://github.com/jerry-D/SYMPL_IEEE754-2019_ISA/blob/main/SYMPdemo2.gif)
