@@ -1,0 +1,248 @@
+ 00000000                                         LIST "OFF"  ;turn listing off here because xterm presently chokes if LIST is on here 
+ 00000000                                         LIST "ON"  ;turn listing on now
+                                 
+ 00000000 0000000000000100      prog_entry:       DFL  0, start      ;entry point for this program
+ 00000001 0000000000000275      prog_len:         DFL  0, progend    ;the present convention is location 0x00001 is the program/thread length
+                                
+ 00000100                                         org  0x0100
+                                
+                                
+ 00000100 327FEC20FFFFFFFF      start:  _    _4:timerCmpr = _4:#0xFFFFFFFF
+ 00000101 327FFE2000001FE0              _    _4:SP = _4:#0x1FE0                   ;allow for 256-bit push if need be
+ 00000102 307CDC0000000010              _    _1:clrDVCNZ = _1:#DoneBit            ;clear the Done bit to enable timer
+ 00000103 317FB3100000006C              _    _2:artRxClkDiv = _2:#108             ;set baud rate for 12.5MHz clock / 115200 baud = 109 rounded up, subtract 1 = 108  
+                                ;        _    _1:artCntrl = _1:#0x01              ;set serial format for 8 data bits, 1 stop bit, no parity
+ 00000104 307FB20000000002              _    _1:artCntrl = _1:#0x02               ;set serial format for 8 data bits, 2 stop bit, no parity
+                                        
+ 00000105 327FF72080000205              _    _4:AR0 = _4:#{demoMenu | 0x80000000} ;point to demo menu
+ 00000106 127FF3000000008F              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage subroutine
+ 00000107 0000000000000000              _
+ 00000108 327FF720800001D9              _    _4:AR0 = _4:#{tekPlotMode | 0x80000000}  ;pop up the Tek window to draw on     
+ 00000109 127FF3000000008C              _    _4:PCC = (_1:0, 0, sendMessage)      
+ 0000010A 0000000000000000              _
+ 0000010B 327FF720800001DB              _    _4:AR0 = _4:#{tekNorm | 0x80000000}  ;switch back to Normal (target) display buffer to put the cursor back in main window
+ 0000010C 127FF30000000089              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+                                
+ 0000010D 32002020800001DD              _    _4:prevPlot = _4:#{line1 | 0x80000000}
+                                        
+                                        
+ 0000010E 0000000000000000      demoLoop:    _
+ 0000010F 0000000000000000              _
+                                            
+ 00000110 127FF300000000B5              _    _4:PCC = (_1:0,0, getChar)
+ 00000111 0000000000000000              _
+ 00000112 327FF720800001D7              _    _4:AR0 = _4:#{hiLiteOff | 0x80000000}
+ 00000113 127FF30000000082              _    _4:PCC = (_1:0, 0, sendMessage)      
+ 00000114 107FCF0023100031              _    _1:compare = (_1:inChar, _1:#"1")
+ 00000115 0000000000000000              _
+ 00000116 127FF407FF100018              _    _4:PCS = (_1:STATUS, Z, draw1)
+ 00000117 107FCF0023100032              _    _1:compare = (_1:inChar, _1:#"2")
+ 00000118 0000000000000000              _
+ 00000119 127FF407FF100022              _    _4:PCS = (_1:STATUS, Z, draw2)
+ 0000011A 107FCF0023100033              _    _1:compare = (_1:inChar, _1:#"3")
+ 0000011B 0000000000000000              _
+ 0000011C 127FF407FF10002C              _    _4:PCS = (_1:STATUS, Z, draw3)
+ 0000011D 107FCF0023100034              _    _1:compare = (_1:inChar, _1:#"4")
+ 0000011E 0000000000000000              _
+ 0000011F 127FF407FF100036              _    _4:PCS = (_1:STATUS, Z, draw4)
+ 00000120 107FCF0023100035              _    _1:compare = (_1:inChar, _1:#"5")
+ 00000121 0000000000000000              _
+ 00000122 127FF407FF100040              _    _4:PCS = (_1:STATUS, Z, draw5)
+ 00000123 107FCF0023100036              _    _1:compare = (_1:inChar, _1:#"6")
+ 00000124 0000000000000000              _
+ 00000125 127FF407FF10004A              _    _4:PCS = (_1:STATUS, Z, draw6)
+ 00000126 107FCF0023100037              _    _1:compare = (_1:inChar, _1:#"7")
+ 00000127 0000000000000000              _
+ 00000128 127FF407FF100054              _    _4:PCS = (_1:STATUS, Z, draw7)                                             
+ 00000129 107FCF0023100038              _    _1:compare = (_1:inChar, _1:#"8")                                          
+ 0000012A 0000000000000000              _
+ 0000012B 127FF407FF10005E              _    _4:PCS = (_1:STATUS, Z, draw8)
+ 0000012C 127FF30000003FE2              _    _4:PCC = (_1:0, 0, demoLoop)
+ 0000012D 0000000000000000              _
+                                                               
+                                        
+ 0000012E 027FF72002000000      draw1:  _    _4:AR0 = _4:prevPlot 
+ 0000012F 127FF30000000066              _    _4:PCC = (_1:0, 0, sendMessage)  
+                                
+ 00000130 32002020800001DD              _    _4:prevPlot = _4:#{line1 | 0x80000000}
+ 00000131 327FF720800001D5              _    _4:AR0 = _4:#{hiLiteOn | 0x80000000}
+ 00000132 127FF30000000063              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000133 0000000000000000              _
+ 00000134 327FF720800001DD              _    _4:AR0 = _4:#{line1 | 0x80000000}
+ 00000135 127FF30000000060              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000136 0000000000000000              _
+ 00000137 327FFD2080000600              _    _4:AR6 = _4:#{_01_barchart_plt | 0x80000000}  
+ 00000138 127FF3000000006D              _    _4:PCC = (_1:0, 0, sendTekMsg)    
+ 00000139 127FF30000003FD5              _    _4:PCC = (_1:0, 0, demoLoop)
+ 0000013A 0000000000000000              _      
+ 0000013B 027FF72002000000      draw2:  _    _4:AR0 = _4:prevPlot 
+ 0000013C 127FF30000000059              _    _4:PCC = (_1:0, 0, sendMessage)  
+                                        
+ 0000013D 32002020800001E2              _    _4:prevPlot = _4:#{line2 | 0x80000000}
+ 0000013E 327FF720800001D5              _    _4:AR0 = _4:#{hiLiteOn | 0x80000000}
+ 0000013F 127FF30000000056              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000140 0000000000000000              _
+ 00000141 327FF720800001E2              _    _4:AR0 = _4:#{line2 | 0x80000000}
+ 00000142 127FF30000000053              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000143 0000000000000000              _
+ 00000144 327FFD2080000800              _    _4:AR6 = _4:#{_09_wizard_plt | 0x80000000}
+ 00000145 127FF30000000060              _    _4:PCC = (_1:0, 0, sendTekMsg)    
+ 00000146 127FF30000003FC8              _    _4:PCC = (_1:0, 0, demoLoop)
+ 00000147 0000000000000000              _      
+ 00000148 027FF72002000000      draw3:  _    _4:AR0 = _4:prevPlot 
+ 00000149 127FF3000000004C              _    _4:PCC = (_1:0, 0, sendMessage)  
+                                        
+ 0000014A 32002020800001E7              _    _4:prevPlot = _4:#{line3 | 0x80000000}
+ 0000014B 327FF720800001D5              _    _4:AR0 = _4:#{hiLiteOn | 0x80000000}
+ 0000014C 127FF30000000049              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 0000014D 0000000000000000              _
+ 0000014E 327FF720800001E7              _    _4:AR0 = _4:#{line3 | 0x80000000}
+ 0000014F 127FF30000000046              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000150 0000000000000000              _
+ 00000151 327FFD2080000A00              _    _4:AR6 = _4:#{baz_plt | 0x80000000}       
+ 00000152 127FF30000000053              _    _4:PCC = (_1:0, 0, sendTekMsg)    
+ 00000153 127FF30000003FBB              _    _4:PCC = (_1:0, 0, demoLoop)
+ 00000154 0000000000000000              _      
+ 00000155 027FF72002000000      draw4:  _    _4:AR0 = _4:prevPlot 
+ 00000156 127FF3000000003F              _    _4:PCC = (_1:0, 0, sendMessage)  
+                                        
+ 00000157 32002020800001EC              _    _4:prevPlot = _4:#{line4 | 0x80000000}
+ 00000158 327FF720800001D5              _    _4:AR0 = _4:#{hiLiteOn | 0x80000000}
+ 00000159 127FF3000000003C              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 0000015A 0000000000000000              _
+ 0000015B 327FF720800001EC              _    _4:AR0 = _4:#{line4 | 0x80000000}
+ 0000015C 127FF30000000039              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 0000015D 0000000000000000              _
+ 0000015E 327FFD2080000C00              _    _4:AR6 = _4:#{dmaker_plt | 0x80000000}      
+ 0000015F 127FF30000000046              _    _4:PCC = (_1:0, 0, sendTekMsg)    
+ 00000160 127FF30000003FAE              _    _4:PCC = (_1:0, 0, demoLoop) 
+ 00000161 0000000000000000              _     
+ 00000162 027FF72002000000      draw5:  _    _4:AR0 = _4:prevPlot 
+ 00000163 127FF30000000032              _    _4:PCC = (_1:0, 0, sendMessage)  
+                                        
+ 00000164 32002020800001F1              _    _4:prevPlot = _4:#{line5 | 0x80000000}
+ 00000165 327FF720800001D5              _    _4:AR0 = _4:#{hiLiteOn | 0x80000000}
+ 00000166 127FF3000000002F              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000167 0000000000000000              _
+ 00000168 327FF720800001F1              _    _4:AR0 = _4:#{line5 | 0x80000000}
+ 00000169 127FF3000000002C              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 0000016A 0000000000000000              _
+ 0000016B 327FFD2080000E00              _    _4:AR6 = _4:#{ocpred_tek | 0x80000000}      
+ 0000016C 127FF30000000039              _    _4:PCC = (_1:0, 0, sendTekMsg)    
+ 0000016D 127FF30000003FA1              _    _4:PCC = (_1:0, 0, demoLoop) 
+ 0000016E 0000000000000000              _     
+ 0000016F 027FF72002000000      draw6:  _    _4:AR0 = _4:prevPlot 
+ 00000170 127FF30000000025              _    _4:PCC = (_1:0, 0, sendMessage)  
+                                        
+ 00000171 32002020800001F6              _    _4:prevPlot = _4:#{line6 | 0x80000000}
+ 00000172 327FF720800001D5              _    _4:AR0 = _4:#{hiLiteOn | 0x80000000}
+ 00000173 127FF30000000022              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000174 0000000000000000              _
+ 00000175 327FF720800001F6              _    _4:AR0 = _4:#{line6 | 0x80000000}
+ 00000176 127FF3000000001F              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000177 0000000000000000              _
+ 00000178 327FFD2080001000              _    _4:AR6 = _4:#{sixcharts_plt | 0x80000000}   
+ 00000179 127FF3000000002C              _    _4:PCC = (_1:0, 0, sendTekMsg)    
+ 0000017A 127FF30000003F94              _    _4:PCC = (_1:0, 0, demoLoop)  
+ 0000017B 0000000000000000              _    
+ 0000017C 027FF72002000000      draw7:  _    _4:AR0 = _4:prevPlot 
+ 0000017D 127FF30000000018              _    _4:PCC = (_1:0, 0, sendMessage)  
+                                        
+ 0000017E 32002020800001FB              _    _4:prevPlot = _4:#{line7 | 0x80000000}
+ 0000017F 327FF720800001D5              _    _4:AR0 = _4:#{hiLiteOn | 0x80000000}
+ 00000180 127FF30000000015              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000181 0000000000000000              _
+ 00000182 327FF720800001FB              _    _4:AR0 = _4:#{line7 | 0x80000000}
+ 00000183 127FF30000000012              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000184 0000000000000000              _
+ 00000185 327FFD2080001200              _    _4:AR6 = _4:#{teklogo_plt | 0x80000000}     
+ 00000186 127FF3000000001F              _    _4:PCC = (_1:0, 0, sendTekMsg)    
+ 00000187 127FF30000003F87              _    _4:PCC = (_1:0, 0, demoLoop)
+ 00000188 0000000000000000              _      
+ 00000189 027FF72002000000      draw8:  _    _4:AR0 = _4:prevPlot 
+ 0000018A 127FF3000000000B              _    _4:PCC = (_1:0, 0, sendMessage)  
+                                        
+ 0000018B 3200202080000200              _    _4:prevPlot = _4:#{line8 | 0x80000000}
+ 0000018C 327FF720800001D5              _    _4:AR0 = _4:#{hiLiteOn | 0x80000000}
+ 0000018D 127FF30000000008              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 0000018E 0000000000000000              _
+ 0000018F 327FF72080000200              _    _4:AR0 = _4:#{line8 | 0x80000000}
+ 00000190 127FF30000000005              _    _4:PCC = (_1:0, 0, sendMessage)      ;branch always to sendMessage
+ 00000191 0000000000000000              _
+ 00000192 327FFD2080001400              _    _4:AR6 = _4:#{gsxbasic1_plt | 0x80000000}   
+ 00000193 127FF30000000012              _    _4:PCC = (_1:0, 0, sendTekMsg)    
+ 00000194 127FF30000003F7A              _    _4:PCC = (_1:0, 0, demoLoop)      
+                                                               
+                                
+ 00000195 0000000000000000      sendMessage: _
+ 00000196 02BFE727FF200000              _    _4:*SP--[4] = _4:PC_COPY            ;save return address     
+                                
+ 00000197 0000000000000000      sendLoop:    _
+ 00000198 327FF82000000220              _    _4:AR1 = _4:#outBuf                 ;load AR1 with pointer to first character postion of outBuf
+ 00000199 0B02203800800000              _    s8:outBuf = _8:*AR0++[1]            ;place 8 characters from program ROM into outBuf -- swap endianess
+ 0000019A 317FED1000000008              _    _2:LPCNT0 = _2:#8                   ;each program ROM location contains 8 characters
+ 0000019B 0000000000000000      loopInner:   _
+ 0000019C 107FCF0800100000              _    _1:compare = (_1:*AR1[0], _1:#0x00) ;see if current char is a null character 
+ 0000019D 0000000000000000              _
+ 0000019E 0002300800900000              _    _1:cout = _1:*AR1++[1]              ;copy first char in buffer to cout and increment to next character
+ 0000019F 127FF307FF10001C              _    _4:PCC = (_1:STATUS, Z, sendChar)   ;if not null then send it
+ 000001A0 127FF407FF100003              _    _4:PCS = (_1:STATUS, Z, clrLPCNT)   ;else exit if null char
+ 000001A1 127FF427FED43FFA              _    _4:PCS = (_4:LPCNT0, 16, loopInner) ;next  
+ 000001A2 127FF30000003FF5              _    _4:PCC = (_1:0, 0, sendLoop)        ;branch always to sendLoop 
+                                            
+ 000001A3 0000000000000000      clrLPCNT:    _   
+ 000001A4 027FF52802700000             _     _4:PC = _4:*SP++[4]                 ;restore PC (return)
+                                
+ 000001A5 0000000000000000      sendTekMsg:  _
+ 000001A6 02BFE727FF200000             _     _4:*SP--[4] = _4:PC_COPY            ;save return address
+                                              
+ 000001A7 327FF720800001D9             _     _4:AR0 = _4:#{tekPlotMode | 0x80000000}   ;switch to Tektronix mode    
+ 000001A8 127FF30000003FED             _     _4:PCC = (_1:0, 0, sendMessage) 
+ 000001A9 0000000000000000             _ 
+                                       
+ 000001AA 0000000000000000      sendTekLoop: _
+ 000001AB 327FF82000000220             _     _4:AR1 = _4:#outBuf               
+ 000001AC 0302203800E00000             _     _8:outBuf = _8:*AR6++[1]          
+ 000001AD 317FED1000000008             _     _2:LPCNT0 = _2:#8                 
+ 000001AE 0000000000000000      loopTekInner: _ 
+ 000001AF 107FCF0800100000             _     _1:compare = (_1:*AR1[0], _1:#0x00)    ;see if current char is a null character 
+ 000001B0 0000000000000000             _
+ 000001B1 0002300800900000             _     _1:cout = _1:*AR1++[1]                 ;copy first char in buffer to cout and increment to next character
+ 000001B2 127FF307FF100009             _     _4:PCC = (_1:STATUS, Z, sendChar)      ;if not null then send it
+ 000001B3 127FF407FF100003             _     _4:PCS = (_1:STATUS, Z, clrTekLPCNT)   ;else exit if null char
+ 000001B4 127FF427FED43FFA             _     _4:PCS = (_4:LPCNT0, 16, loopTekInner) ;next  
+ 000001B5 127FF30000003FF5             _     _4:PCC = (_1:0, 0, sendTekLoop)        ;branch always to sendLoop 
+                                            
+ 000001B6 0000000000000000      clrTekLPCNT: _  
+ 000001B7 327FF720800001DB             _     _4:AR0 = _4:#{tekNorm | 0x80000000}    ;switch back to Normal (target) display buffer
+ 000001B8 127FF30000003FDD             _     _4:PCC = (_1:0, 0, sendMessage)        ;branch always to sendMessage
+ 000001B9 0000000000000000             _
+ 000001BA 027FF52802700000             _     _4:PC = _4:*SP++[4]                    ;restore PC (return)
+                                            
+                                            
+ 000001BB 0000000000000000      sendChar:    _
+ 000001BC 02BFE727FF200000             _     _4:*SP--[4] = _4:PC_COPY                 
+ 000001BD 0000000000000000      waitTDRE:    _ 
+ 000001BE 127FF307FB117FFF             _     _4:PCC = (_1:artStat, TDRE, waitTDRE)  ;wait for TDRE to become 1 if not already 1
+ 000001BF 0000000000000000             _
+ 000001C0 327FF92000000000             _     _4:AR2 = _4:#0
+                                ;       _     _2:REPEAT = _2:#215                   ;roughly 2 bit times
+ 000001C1 317FEF100000006C             _     _2:REPEAT = _2:#108                    ;roughly 1 bit time
+ 000001C2 3080020000000000             _     _1:*AR2++[0] = _1:#0                   ;delay specified amount to give time
+                                                                                    ;for TEK rendering to do its thing
+                                       
+ 000001C3 007FB00023000000             _     _1:artTdr = _1:cout                    ;send it
+                                       
+ 000001C4 027FF52802700000             _     _4:PC = _4:*SP++[4]                    ;restore PC (return)
+                                
+ 000001C5 0000000000000000      getChar:     _
+ 000001C6 02BFE727FF200000             _     _4:*SP--[4] = _4:PC_COPY                
+ 000001C7 0000000000000000      waitRDRF:    _
+ 000001C8 007F8407F8500000             _     _1:LEDreg = _1:buttons                 ;capture buttons and write them to LEDs
+                                
+ 000001C9 127FF307FB113FFE             _     _4:PCC = (_1:artStat, RDRF, waitRDRF)
+ 000001CA 00023107FB000000             _     _1:inChar = _1:artRdr                
+ 000001CB 027FF52802700000             _     _4:PC = _4:*SP++[4]                 
+ 000001CC 0000000000000000             _
+ 000001CD 0000000000000000             _
+ 000001CE                                    LIST "OFF"  ;turn listing off here because the escape sequences 
